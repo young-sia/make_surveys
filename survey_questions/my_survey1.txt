@@ -7,13 +7,11 @@ survey
 4.residential type(own home/charter(type that is only in korea)/monthly rent/else)
 5.the equilibrum of property(1/2/3/4/5/6/7/8/9/10)
 6.present employment status(permanent/non-regular/unemployed/else)
-7.number of SNS friends contacted or met in recent 1 year
-8.number of real friends contacted or met in recent 1 year
-9.SNS friends- how much did you use?
-10.real friends - how much did you use?
+7.number of friends contacted or met in recent 1 year
+8.friends- how much did you use in recent 1yr?
 
 **Notice**
 This survey is not actually investigated from people.
 I made up all the probabilities and mean and varience of normal distributions.
 The probabilities from questions l~6 are from national statistic site
-The answer of this topic is independent,
+The money one used is based on the cost of how much one earns in one month(I made mean as 1/3 of the cost)
