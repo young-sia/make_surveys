@@ -10,7 +10,7 @@ logger = logging.getLogger('logger')
 
 def main():
     test = my_survey(1000)
-    basic_stats_test = get_basic_statistics(test, 10)
+    basic_stats_test = get_basic_statistics(test, 8)
     freq_statistics_x1 = get_freq_statistics(test, 'x1')
     freq_statistics_x2 = get_freq_statistics(test, 'x2')
     freq_statistics_x3 = get_freq_statistics(test, 'x3')
@@ -21,10 +21,10 @@ def main():
     sample_test_sys = sys_sampling(test, 300)
     sample_test_str = stratified_sampling(test, 'x5', 300)
     sample_test_cls = cluster_sampling(test, 'x5', 3)
-    basic_stats_sample_rss = get_basic_statistics(sample_test_rss, 10)
-    basic_stats_sample_sys = get_basic_statistics(sample_test_sys, 10)
-    basic_stats_sample_str = get_basic_statistics(sample_test_str, 10)
-    basic_stats_sample_cls = get_basic_statistics(sample_test_cls, 10)
+    basic_stats_sample_rss = get_basic_statistics(sample_test_rss, 8)
+    basic_stats_sample_sys = get_basic_statistics(sample_test_sys, 8)
+    basic_stats_sample_str = get_basic_statistics(sample_test_str, 8)
+    basic_stats_sample_cls = get_basic_statistics(sample_test_cls, 8)
 
     # population
     print(color.purple+"My First Survey"+color.white)
@@ -45,6 +45,9 @@ def main():
     print(freq_statistics_x6)
     # SRS method sampling
     print(color.green+"rss sampling result"+color.white)
+    print(sample_test_rss)
+    print("")
+    print(color.green+"rss sampling basic statistics"+color.white)
     print(basic_stats_sample_rss)
     # systematic sampling method
     print(color.green+"sys sampling result"+color.white)

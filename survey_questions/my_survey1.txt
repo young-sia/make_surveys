@@ -1,3 +1,5 @@
+Topic: The relationship between educational background and how much they use
+
 survey
 1. sex(man/woman)
 2. final graduation(high school/college/university/graduate school/else)
@@ -14,3 +16,4 @@ survey
 This survey is not actually investigated from people.
 I made up all the probabilities and mean and varience of normal distributions.
 The probabilities from questions l~6 are from national statistic site
+The answer of this topic is independent,

@@ -15,6 +15,34 @@ def normal_distribution(mu, sigma, n):
     return samples
 
 
+def normal_distribution_with_condition(condition, prob, numbers):
+    size = dict()
+    size_2 = list()
+    for n in condition.iloc[:, 1]:
+        if n not in size_2:
+            size_2 += [n]
+    for m in condition.iloc[:, 0]:
+        if m not in size:
+            size[m] = dict()
+            for k in size_2:
+                if k not in size[m]:
+                    size[m][k] = {
+                        'count': 0
+                     }
+    for k in range(0, numbers):
+        m = condition.iloc[k, 0]
+        i = condition.iloc[k, 1]
+        size[m][i]['count'] += 1
+    samples = dict()
+    for key in size:
+        for key2 in size[key]:
+            if size[key][key2]['count'] != 0:
+                samples[key] = {
+                    key2: normal_distribution(prob[key][key2][0], prob[key][key2][1], size[key][key2]['count'])
+                }
+    return samples
+
+
 # Getting random values x that is made by probability i made
 # Usually used in nominal variables
 def nominal_variance_with_my_probability(k, n, prob):
