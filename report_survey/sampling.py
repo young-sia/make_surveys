@@ -25,7 +25,7 @@ def sys_sampling(data, k):
     # intoin = index - 0
     sys_sample = pd.DataFrame()
     while len(sys_sample) < k:
-        sys_sample = sys_sample.append(data.loc[index, :])
+        sys_sample = sys_sample.combine_first(data.loc[index, ...])
         index += section_k
     return sys_sample
 

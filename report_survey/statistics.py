@@ -15,30 +15,64 @@ def normal_distribution(mu, sigma, n):
     return samples
 
 
-def normal_distribution_with_condition(condition, prob, numbers):
-    size = dict()
-    size_2 = list()
-    for n in condition.iloc[:, 1]:
-        if n not in size_2:
-            size_2 += [n]
-    for m in condition.iloc[:, 0]:
-        if m not in size:
-            size[m] = dict()
-            for k in size_2:
-                if k not in size[m]:
-                    size[m][k] = {
-                        'count': 0
+# This is for the question that's answer gets effect from other question
+# This case is when the sample x forms normal distribution that gets effect from
+# two different questions.
+# The condition is questions that affects to the samples I want to make.
+# Even though this definition can only cover 2 questions, my final goal is
+# not to get affected of the number of conditions
+# condition: 2 questions, probs: the probabilities(in the form of normal distribution in each cases)
+# n: number of samples I want to get
+def normal_distribution_with_condition(condition, prob, n):
+    cond_count = dict()
+    cond2_count = list()
+    # condition.iloc[:,:] is from pandas package.
+    # It figures out which row and columns to pick by numbers. It does not care what the number of row or column has
+    # [a,b]: a means pick a column and b means b row.
+    # In the Dataframe starts with 0.
+    # This is to count how many same variable(in form of (a,b).)
+    # For example, if first condition is [1,2,1,1] and second condition is [1,1,3,1],
+    # (In this case, the answer of 1st person will be 1 in first condition, and 1 in second condition)
+    #  size ={
+    #      1:{
+    #          1:{
+    #              'count':2
+    #          }
+    #          3:{
+    #              'count':1
+    #          }
+    #      }
+    #      2:{
+    #          1:{
+    #              'count':1
+    #          }
+    #
+    #      }
+    #  }
+
+    for effect1 in condition.iloc[:, 1]:  # pick all columns in 2nd row.
+        if effect1 not in cond2_count:
+            cond2_count += [effect1]
+    for effect2 in condition.iloc[:, 0]:  # pick all columns in 1st row.
+        if effect2 not in cond_count:
+            cond_count[effect2] = dict()
+            for row_count in cond2_count:
+                if row_count not in cond_count[effect2]:
+                    cond_count[effect2][row_count] = {
+                        'count': 0  # It is to count how many certain variables in each case has.
                      }
-    for k in range(0, numbers):
-        m = condition.iloc[k, 0]
-        i = condition.iloc[k, 1]
-        size[m][i]['count'] += 1
+    for row_count in range(0, n):
+        effect2 = condition.iloc[row_count, 0]
+        freq_temp = condition.iloc[row_count, 1]
+        cond_count[effect2][freq_temp]['count'] += 1
+
+    # Using cond_count, make samples from it
     samples = dict()
-    for key in size:
-        for key2 in size[key]:
-            if size[key][key2]['count'] != 0:
+    for key in cond_count:
+        for key2 in cond_count[key]:
+            if cond_count[key][key2]['count'] != 0:
                 samples[key] = {
-                    key2: normal_distribution(prob[key][key2][0], prob[key][key2][1], size[key][key2]['count'])
+                    key2: normal_distribution(prob[key][key2][0], prob[key][key2][1], cond_count[key][key2]['count'])
                 }
     return samples
 
@@ -55,6 +89,8 @@ def nominal_variance_with_my_probability(k, n, prob):
 # If the probability of the samples are different due to the answer of one of the previous question
 # There are k types of nominal variables, which each type has condition, and from each condition has
 # probability prob(this is a Dataframe)
+# This definition can hold only 1 condition. My goal is to make it work no matter how many conditions
+# I need to put.
 def nominal_variance_with_my_probability_with_condition(k, condition, prob):
     numbers = np.arange(1, k+1)
     logger.info(f'list: {numbers}')
