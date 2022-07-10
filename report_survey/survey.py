@@ -31,6 +31,7 @@ def random_survey_example1(n):
 
 # Questions and notices are in my_survey.txt, survey_question folder
 #  Q2 affects Q6 and Q8, Q6 affects Q8
+# TODO: data does not belong in code. move this data to some csv files or something and read them in
 def my_survey(n):
     # Getting probability of nominal variances
     logger.info('about to get random survey')
@@ -66,35 +67,31 @@ def my_survey(n):
     # For example, if
     # x6_dic = {1:{'samples': 4,2,5}, 2:{'samples': 3,1,1}} and x2=[2,1,1,2,2,1],
     # x6 = [3,4,2,1,1,5]
+    # TODO: why is is this a dictionary if your keys are numbers? why not a list?
     x6_dic = nominal_variance_with_my_probability_with_condition(4, x2, prob6)
+    x6_original = [0]*5
     x6_sub = list()
-    for row_num in range(0, n):
-        x6_1 = 0
-        x6_2 = 0
-        x6_3 = 0
-        x6_4 = 0
-        x6_5 = 0
-        if x2[row_num] == 1:
-            x6_sub += [x6_dic[1]['samples'][x6_1]]
-            x6_1 += 1
-        elif x2[row_num] == 2:
-            x6_sub += [x6_dic[2]['samples'][x6_2]]
-            x6_2 += 1
-        elif x2[row_num] == 3:
-            x6_sub += [x6_dic[3]['samples'][x6_3]]
-            x6_3 += 1
-        elif x2[row_num] == 4:
-            x6_sub += [x6_dic[4]['samples'][x6_4]]
-            x6_4 += 1
-        else:
-            x6_sub += [x6_dic[5]['samples'][x6_5]]
-            x6_5 += 1
+    for row_num in range(n):
+        # TODO: why are we counting from 1???
+        for sample_set_index in range(1, 6):
+            if x2[row_num] == sample_set_index:
+                # TODO(TheBeege): fix this
+                # breaks here. the values in x6_original are dynamic, and there's no constraint ensuring that
+                # the values in x6_original don't exceed the length of the number of values in x6_dic[n]['samples']
+                x6_sub += [x6_dic[sample_set_index]['samples'][x6_original[sample_set_index-1]]]
+                x6_original[sample_set_index-1] += 1
 
     # x6_sub is 1*n list. However, other lists I need to merge are n*1 list. So I transposed it
     x6 = np.transpose(x6_sub)
 
     x7 = normal_distribution(30, 30, n)
 
+    # TODO: why do x2 and x6 affect x8??? what are these x's???
+    # TODO: don't use "x" unless you're working in geometric coordinate space
+    # TODO: what is this order?
+    # TODO: what is "condition" in this context?
+    # TODO: your example doesn't actually explain anything. what?
+    # TODO: when writing nested data structures, use newlines and indentation
     # x2 and x6 affects x8. Like x6, I needed to make it in right order. So I fixed the order to match up with
     # other answers properly. For example, if
     # x8_condition = {1: {1: {2,3,1}, 3: {4,4}}, 2:{3: {2,1}} }, x2 = [1,1,1,2,1,2,1], x6 = [1,1,3,3,3,3,1]
@@ -105,91 +102,19 @@ def my_survey(n):
     for row_num in range(0, n):
         x6_2 = x8_condition.iloc[row_num, 0]
         x6_3 = x8_condition.iloc[row_num, 1]
-        x2_1_x6_1 = 0
-        x2_1_x6_2 = 0
-        x2_1_x6_3 = 0
-        x2_1_x6_4 = 0
-        x2_2_x6_1 = 0
-        x2_2_x6_2 = 0
-        x2_2_x6_3 = 0
-        x2_2_x6_4 = 0
-        x2_3_x6_1 = 0
-        x2_3_x6_2 = 0
-        x2_3_x6_3 = 0
-        x2_3_x6_4 = 0
-        x2_4_x6_1 = 0
-        x2_4_x6_2 = 0
-        x2_4_x6_3 = 0
-        x2_4_x6_4 = 0
-        x2_5_x6_1 = 0
-        x2_5_x6_2 = 0
-        x2_5_x6_3 = 0
-        x2_5_x6_4 = 0
-        if x6_2 == 1:
-            if x6_3 == 1:
-                x8 += [x8_sub[1][1][x2_1_x6_1]]
-                x2_1_x6_1 += 1
-            elif x6_3 == 2:
-                x8 += [x8_sub[1][2][x2_1_x6_2]]
-                x2_1_x6_2 += 1
-            elif x6_3 == 3:
-                x8 += [x8_sub[1][3][x2_1_x6_3]]
-                x2_1_x6_3 += 1
-            elif x6_3 == 4:
-                x8 += [x8_sub[1][4][x2_1_x6_4]]
-                x2_1_x6_4 += 1
-        elif x6_2 == 2:
-            if x6_3 == 1:
-                x8 += [x8_sub[2][1][x2_2_x6_1]]
-                x2_2_x6_1 += 1
-            elif x6_3 == 2:
-                x8 += [x8_sub[2][2][x2_2_x6_2]]
-                x2_2_x6_2 += 1
-            elif x6_3 == 3:
-                x8 += [x8_sub[2][3][x2_2_x6_3]]
-                x2_2_x6_3 += 1
-            elif x6_3 == 4:
-                x8 += [x8_sub[2][4][x2_2_x6_4]]
-                x2_2_x6_4 += 1
-        elif x6_2 == 3:
-            if x6_3 == 1:
-                x8 += [x8_sub[3][1][x2_3_x6_1]]
-                x2_3_x6_1 += 1
-            elif x6_3 == 2:
-                x8 += [x8_sub[3][2][x2_3_x6_2]]
-                x2_3_x6_2 += 1
-            elif x6_3 == 3:
-                x8 += [x8_sub[3][3][x2_3_x6_3]]
-                x2_3_x6_3 += 1
-            elif x6_3 == 4:
-                x8 += [x8_sub[3][4][x2_3_x6_4]]
-                x2_3_x6_4 += 1
-        elif x6_2 == 4:
-            if x6_3 == 1:
-                x8 += [x8_sub[4][1][x2_4_x6_1]]
-                x2_4_x6_1 += 1
-            elif x6_3 == 2:
-                x8 += [x8_sub[4][2][x2_4_x6_2]]
-                x2_4_x6_2 += 1
-            elif x6_3 == 3:
-                x8 += [x8_sub[4][3][x2_4_x6_3]]
-                x2_4_x6_3 += 1
-            elif x6_3 == 4:
-                x8 += [x8_sub[4][4][x2_4_x6_4]]
-                x2_4_x6_4 += 1
-        elif x6_2 == 5:
-            if x6_3 == 1:
-                x8 += [x8_sub[5][1][x2_5_x6_1]]
-                x2_5_x6_1 += 1
-            elif x6_3 == 2:
-                x8 += [x8_sub[5][2][x2_5_x6_2]]
-                x2_5_x6_2 += 1
-            elif x6_3 == 3:
-                x8 += [x8_sub[5][3][x2_5_x6_3]]
-                x2_5_x6_3 += 1
-            elif x6_3 == 4:
-                x8 += [x8_sub[5][4][x2_5_x6_4]]
-                x2_5_x6_4 += 1
+        # TODO: this is the most absurd variable name i've ever seen, but it's accurate given my limited understanding
+        x6_2_by_x6_3_values = [[0]*4]*5
+        for x6_2_index in range(5):
+            for x6_3_index in range(4):
+                # TODO: if we counted by 0 (i.e. used a list instead of a dictionary), we could skip this i+1 nonsense
+                # TODO: something tells me that if i understood iloc better, we could avoid this
+                if x6_2 == x6_2_index + 1 and x6_3 == x6_3_index + 1:
+                    x8 += [
+                        x8_sub[x6_2_index+1][x6_3_index+1][
+                            x6_2_by_x6_3_values[x6_2_index][x6_3_index]
+                        ]
+                    ]
+                    x6_2_by_x6_3_values[x6_2_index][x6_3_index] += 1
 
     # x6_sub is 1*n list. However, other lists I need to merge are n*1 list. So I transposed it
     x8 = np.transpose(x8)
